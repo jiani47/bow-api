@@ -16,6 +16,16 @@ class UserSerializer(serializers.ModelSerializer):
         # overwriteing the create method and the validated data is validated by the serializer 
         return get_user_model().objects.create_user(**validated_data)
 
+    def update(Self, instance, validated_data):
+        #instance is the model instance to be updated.
+        password = validated_data.pop('password', None)
+        user = super().update(instance, validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+
+        return user
+
 
 class AuthTokenSerializer(serializers.Serializer):
     """serializer for the user auth token """
