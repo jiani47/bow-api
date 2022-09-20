@@ -1,3 +1,24 @@
-from django.shortcuts import render
+"""
+views for the Employee API
+"""
+from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-# Create your views here.
+from employee.serializers import EmployeeSerializer
+from employee.models import Employee
+
+
+class EmployeeViewSet(viewsets.ModelViewSet):
+    serializer_class = EmployeeSerializer
+    queryset = Employee.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+    
+    def get_queryset(self):
+        return super().get_queryset()
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    
