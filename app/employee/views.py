@@ -11,12 +11,10 @@ from employee.models import Employee
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.all()
+    queryset = Employee.objects.all().order_by('full_name')
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     
-    def get_queryset(self):
-        return super().get_queryset()
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
