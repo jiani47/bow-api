@@ -15,3 +15,12 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name # this affects how it will be displayed in django admin
+
+class Assignment(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    employee = models.ForeignKey(employee_models.Employee, on_delete=models.CASCADE)
+    start_date = models.DateField(null=False)
+    end_date = models.DateField(null=False)
+
+    def __str__(self) -> str:
+        return f'project :{self.project} , employee : {self.employee} start from: {self.start_date} end by {self.end_date}'
