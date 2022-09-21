@@ -7,7 +7,9 @@ from rest_framework.test import APIClient
 
 from employee.models import Employee
 
-EMPLOYEE_URL = reverse('employee:employee-list')
+CREATE_EMPLOYEE_URL = reverse('employee:create')
+LIST_EMPLOYEE_URL = reverse('employee:list')
+
 class EmployeeTests(TestCase):
     def setUp(self):
         self.superuser_client = APIClient()
@@ -41,7 +43,7 @@ class EmployeeTests(TestCase):
         payload = {
             'full_name' : 'Jia Ni'
         }
-        res = self.superuser_client.post(EMPLOYEE_URL, payload)
+        res = self.superuser_client.post(CREATE_EMPLOYEE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         employee = Employee.objects.get(id=res.data['id'])
         self.assertEqual(employee.full_name, payload['full_name'])
@@ -50,13 +52,13 @@ class EmployeeTests(TestCase):
         payload = {
             'full_name' : 'Jia Ni'
         }
-        res = self.regularuser_client.post(EMPLOYEE_URL, payload)
+        res = self.regularuser_client.post(CREATE_EMPLOYEE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_all_employees(self):
         e1 = self.create_employee_in_db('Jia Ni')
         e2 = self.create_employee_in_db('Kejun Sun')
-        res = self.superuser_client.get(EMPLOYEE_URL)
+        res = self.superuser_client.get(LIST_EMPLOYEE_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 2)
         # verify sorted in full name ascending order
